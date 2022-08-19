@@ -38,7 +38,17 @@ qp_real toc(qp_timer* t)
 	return (qp_real)duration / 1000000000;
 }
 
+#elif (defined __arm__)
 
+void tic(qp_timer* t)
+{
+	t->tic = 0U;
+}
+
+qp_real toc(qp_timer* t)
+{
+	return 0.f;
+}
 
 #else
 /*! For Posix machines */
@@ -50,7 +60,7 @@ void tic(qp_timer* t)
 
 
 
-double toc(qp_timer* t)
+qp_real toc(qp_timer* t)
 {
 	struct timespec temp;
 

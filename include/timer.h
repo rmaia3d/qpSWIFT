@@ -36,6 +36,13 @@ typedef struct qp_timer{
 	mach_timebase_info_data_t tinfo; /*!< time base info */
 } qp_timer;
 
+#elif (defined __arm__)
+// ARM cortex
+
+typedef struct qp_timer{
+	long tic; /*!< tic time */
+	long toc; /*!< toc time */	
+} qp_timer;
 
 
 #else
