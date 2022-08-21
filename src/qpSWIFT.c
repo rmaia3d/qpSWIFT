@@ -225,7 +225,9 @@ QP *QP_SETUP(qp_int n, qp_int m, qp_int p, qp_int *Pjc, qp_int *Pir, qp_real *Pp
 	if (!kkt_initialize(myQP))
 	{
 		myQP->stats->Flag = QP_KKTFAIL;
+#ifndef NPRINT
 		PRINT("Status : %d", QP_KKTFAIL);
+#endif
 	}
 
 	myQP->stats->ldl_numeric = 0.0;
@@ -447,7 +449,9 @@ QP *QP_SETUP_dense(qp_int n, qp_int m, qp_int p, qp_real *Ppr, qp_real *Apr, qp_
 	if (!kkt_initialize(myQP))
 	{
 		myQP->stats->Flag = QP_KKTFAIL;
+#ifndef NPRINT
 		PRINT("Status : %d", QP_KKTFAIL);
+#endif
 	}
 
 	myQP->stats->ldl_numeric = 0.0;
@@ -481,11 +485,13 @@ qp_int QP_SOLVE(QP *myQP)
 	qp_int Flag_kkt;
 
 #ifndef MATLAB_MEX_FILE
+#ifndef NPRINT
 	if (myQP->options->verbose > 0)
 	{
 		PRINT("****qpSWIFT : Sparse Quadratic Programming Solver****\n\n");
 		PRINT("================Data Statistics======================\n");
 	}
+#endif
 #endif
 
 /*	#ifdef Py_PYTHON_H
@@ -510,10 +516,12 @@ qp_int QP_SOLVE(QP *myQP)
 
 			myQP->stats->fval = obj_value(myQP->P, myQP->c, myQP->x, myQP->temp);
 
+#ifndef NPRINT
 			if (myQP->options->verbose > 0)
 			{
 				PRINT("It: %ld || pcost : %e || rx:%e   ||  ry:%e ||  rz:%e || mu:%e\n", myQP->stats->IterationCount, myQP->stats->fval, myQP->stats->n_rx, myQP->stats->n_ry, myQP->stats->n_rz, myQP->stats->n_mu);
 			}
+#endif
 
 			/* Checks Exit condition if rx < ABSTOL rz < FEASTOl and s'z/m < 1e-6 */
 			if (myQP->p)
@@ -595,10 +603,12 @@ qp_int QP_SOLVE(QP *myQP)
 			updatevariables(myQP->z, myQP->delta_z, myQP->stats->alpha_d, myQP->m);
 			myQP->stats->IterationCount++;
 
+#ifndef NPRINT
 			if (myQP->options->verbose > 0)
 			{
 				PRINT("      || Primal Step Size : %f || Dual Step Size   : %f\n", myQP->stats->alpha_p, myQP->stats->alpha_d);
 			}
+#endif
 		}
 
 		if (myQP->stats->IterationCount == myQP->options->maxit)
@@ -610,6 +620,7 @@ qp_int QP_SOLVE(QP *myQP)
 	myQP->stats->tsolve = toc(&tsolve);
 	myQP->stats->kkt_time = kkt_time;
 
+#ifndef NPRINT
 	if (myQP->options->verbose > 0)
 	{
 		if (myQP->stats->Flag == QP_OPTIMAL)
@@ -639,6 +650,7 @@ qp_int QP_SOLVE(QP *myQP)
 			PRINT("\nLDL Factorization fail\n\n");
 		}
 	}
+#endif
 
 	return myQP->stats->Flag;
 }

@@ -25,11 +25,13 @@ extern "C"
 #define FREE mxFree
 #define PRINT mexPrintf
 #else
-#include <stdio.h>
 #include "stdlib.h"
 #define MALLOC malloc /*!< qpSWIFT malloc alias */
 #define FREE free /*!< qpSWIFT free alias   */
+#ifndef NPRINT	// Using the same format as the amd_* files, to disable printf (if not needed)
+#include <stdio.h>
 #define PRINT printf /*!< qpSWIFT printf alias   */
+#endif
 #endif
 
 /*! QP Specific Varibles */
